@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>الدورات التعليمية — منصة طاهر البيلي</title>
+<meta name="description" content="استعرض جميع الدورات المتاحة على منصة طاهر البيلي وابحث حسب المجال والمستوى والسعر.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%232563eb' stroke-width='2'%3E%3Cpath d='M22 10L12 5 2 10l10 5 10-5z'/%3E%3Cpath d='M6 12v5c0 1.7 2.7 3 6 3s6-1.3 6-3v-5'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<div id="announceBar" class="announce-bar" style="display:none"></div>
+
+<header class="site-header">
+  <div class="container header-inner">
+    <a class="logo" href="index.html"><span class="mark" id="logoMark"></span><span>منصة طاهر البيلي</span></a>
+    <nav class="main-nav" id="mainNav">
+      <a href="index.html" data-nav="home">الرئيسية</a>
+      <a href="courses.html" data-nav="courses">الدورات</a>
+      <a href="index.html#features">المميزات</a>
+      <a href="index.html#faq">الأسئلة الشائعة</a>
+      <a href="index.html#contact">تواصل معنا</a>
+    </nav>
+    <div class="header-actions">
+      <button class="icon-btn" data-theme-toggle aria-label="تبديل الوضع الليلي"></button>
+      <div id="authArea" class="flex" style="gap:8px"></div>
+      <button class="icon-btn burger" id="burger" aria-label="القائمة"></button>
+    </div>
+  </div>
+  <nav class="mobile-nav" id="mobileNav">
+    <a href="index.html" data-nav="home">الرئيسية</a>
+    <a href="courses.html" data-nav="courses">الدورات</a>
+    <a href="index.html#features">المميزات</a>
+    <a href="index.html#faq">الأسئلة الشائعة</a>
+    <div id="authAreaM" class="flex" style="gap:8px;padding:10px 14px;flex-wrap:wrap"></div>
+  </nav>
+</header>
+
+<section class="page-head">
+  <div class="container">
+    <h1>الدورات التعليمية</h1>
+    <p>اختر من بين دوراتنا المتنوعة حسب مجالك ومستواك وابدأ التعلم اليوم.</p>
+  </div>
+</section>
+
+<div class="container">
+  <!-- أدوات البحث والتصفية -->
+  <div class="filters-bar">
+    <div class="search-box">
+      <span id="searchIc"></span>
+      <input type="search" id="fSearch" placeholder="ابحث باسم الدورة أو المحاضر..." aria-label="بحث عن دورة">
+    </div>
+    <select id="fCategory" aria-label="التصنيف"></select>
+    <select id="fLevel" aria-label="المستوى">
+      <option value="">كل المستويات</option>
+      <option>مبتدئ</option>
+      <option>متوسط</option>
+      <option>متقدم</option>
+    </select>
+    <select id="fPrice" aria-label="السعر">
+      <option value="">الكل: مجاني ومدفوع</option>
+      <option value="free">مجاني فقط</option>
+      <option value="paid">مدفوع فقط</option>
+    </select>
+    <select id="fSort" aria-label="الترتيب">
+      <option value="rating">الأعلى تقييماً</option>
+      <option value="popular">الأكثر تسجيلاً</option>
+      <option value="new">الأحدث</option>
+      <option value="priceAsc">السعر: من الأقل</option>
+      <option value="priceDesc">السعر: من الأعلى</option>
+    </select>
+  </div>
+  <p class="result-count mt-2" id="resultCount"></p>
+  <div class="grid-3 mt-2" id="coursesGrid" style="grid-template-columns:repeat(auto-fill,minmax(310px,1fr))"></div>
+  <div class="empty-state hidden" id="emptyState"></div>
+  <div style="height:60px"></div>
+</div>
+
+<!-- نافذة تفاصيل الدورة -->
+<div class="modal-backdrop" id="detailModal">
+  <div class="modal wide">
+    <div class="modal-head"><h3>تفاصيل الدورة</h3><button class="close-m" onclick="closeModal('detailModal')"></button></div>
+    <div class="modal-body" id="detailBody"></div>
+    <div class="modal-foot" id="detailFoot"></div>
+  </div>
+</div>
+
+<!-- نافذة الاشتراك والدفع -->
+<div class="modal-backdrop" id="payModal">
+  <div class="modal" style="max-width:480px">
+    <div class="modal-head"><h3>إتمام الاشتراك</h3><button class="close-m" onclick="closeModal('payModal')"></button></div>
+    <div class="modal-body">
+      <p class="text-muted" style="font-size:14.5px">اختر طريقة الدفع المناسبة لإتمام اشتراكك في الدورة. سيراجع فريق الإدارة العملية ويفعّل اشتراكك سريعاً.</p>
+      <div class="field mt-2">
+        <label>طريقة الدفع <span class="req">*</span></label>
+        <div class="radio-cards" id="payMethods"></div>
+      </div>
+      <div class="demo-box" id="payNote"></div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn btn-ghost" onclick="closeModal('payModal')">إلغاء</button>
+      <button class="btn btn-primary" id="payConfirmBtn"></button>
+    </div>
+  </div>
+</div>
+
+<footer style="background:var(--primary);color:#94a3b8;padding:26px 0;text-align:center;font-size:14px">
+  <div class="container">© <span id="ftYear">2026</span> منصة طاهر البيلي — جميع الحقوق محفوظة. <a href="index.html" style="color:#5eead4">العودة للرئيسية</a></div>
+</footer>
+
+<script src="js/icons.js"></script>
+<script src="js/data.js"></script>
+<script src="js/ui.js"></script>
+<script src="js/courses.js"></script>
+</body>
+</html>

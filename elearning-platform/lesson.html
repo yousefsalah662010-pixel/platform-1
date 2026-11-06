@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>مشاهدة الدروس — منصة طاهر البيلي</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%232563eb' stroke-width='2'%3E%3Cpath d='M22 10L12 5 2 10l10 5 10-5z'/%3E%3Cpath d='M6 12v5c0 1.7 2.7 3 6 3s6-1.3 6-3v-5'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<header class="lesson-top">
+  <div class="container inner">
+    <a class="icon-btn" href="courses.html" aria-label="عودة للدورات" id="backBtn"></a>
+    <div style="flex:1;min-width:0">
+      <b style="font-size:15px;display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis" id="topCourseTitle">مشاهدة الدروس</b>
+      <span style="font-size:12.5px;color:var(--text-2)" id="topProgress">—</span>
+    </div>
+    <button class="icon-btn" data-theme-toggle aria-label="تبديل الوضع الليلي"></button>
+    <div id="userArea"></div>
+    <button class="icon-btn burger" id="burger" aria-label="القائمة"></button>
+  </div>
+</header>
+
+<main class="container" id="mainArea">
+
+  <!-- بوابة: غير مسجل / بانتظار الدفع -->
+  <div id="gateArea" class="hidden"></div>
+
+  <!-- واجهة المشاهدة -->
+  <div id="watchArea" class="lesson-grid hidden">
+    <div>
+      <div class="player-box">
+        <video id="player" controls preload="metadata"></video>
+        <div class="video-fallback hidden" id="videoFallback">
+          <span id="vfIcon"></span>
+          <b>تعذر تشغيل الفيديو التجريبي</b>
+          <span style="max-width:46ch;font-size:13.5px">قد تكون غير متصل بالإنترنت. الفيديوهات هنا لأغراض العرض فقط، وفي النسخة النهائية تُستبدل بمصادر الدورة الحقيقية من لوحة الإدارة. يمكنك متابعة الدرس وتحديده كمكتمل يدوياً.</span>
+        </div>
+      </div>
+      <div class="lesson-head">
+        <div>
+          <span class="chip" id="lessonIdxChip"></span>
+          <h1 id="lessonTitle" style="margin-top:8px"></h1>
+        </div>
+        <button class="btn btn-accent" id="doneBtn"></button>
+      </div>
+      <div class="lesson-nav">
+        <button class="btn btn-ghost" id="prevBtn"></button>
+        <button class="btn btn-primary" id="nextBtn"></button>
+      </div>
+      <div class="tabbar" id="tabbar">
+        <button class="active" data-tab="desc"></button>
+        <button data-tab="files"></button>
+        <button data-tab="qa"></button>
+      </div>
+      <div class="tabpane active" id="pane-desc"></div>
+      <div class="tabpane" id="pane-files"></div>
+      <div class="tabpane" id="pane-qa">
+        <div id="qaList"></div>
+        <div class="qa-item" style="background:var(--bg)">
+          <label style="font-weight:800;font-size:14.5px;display:block;margin-bottom:8px">اطرح سؤالاً أو شارك في النقاش</label>
+          <textarea id="qaInput" class="field" style="min-height:80px" placeholder="اكتب سؤالك هنا..."></textarea>
+          <button class="btn btn-primary btn-sm" id="qaSend"></button>
+        </div>
+      </div>
+    </div>
+    <aside class="lessons-side">
+      <div class="ls-head flex-between">
+        <b id="lsTitle"></b>
+        <span class="badge badge-info" id="lsCount"></span>
+      </div>
+      <div class="ls-head" style="padding-top:0;border-bottom:none">
+        <div class="flex-between mb-1" style="font-size:12.5px;font-weight:700"><span>نسبة إكمال الدورة</span><span id="sidePct" style="color:var(--secondary)"></span></div>
+        <div id="sideProgress"></div>
+      </div>
+      <div class="ls-list" id="lsList"></div>
+    </aside>
+  </div>
+</main>
+
+<footer style="background:var(--primary);color:#94a3b8;padding:22px 0;text-align:center;font-size:13.5px;margin-top:40px">
+  <div class="container">© <span id="ftYear">2026</span> منصة طاهر البيلي — جميع الحقوق محفوظة.</div>
+</footer>
+
+<script src="js/icons.js"></script>
+<script src="js/data.js"></script>
+<script src="js/ui.js"></script>
+<script src="js/lesson.js"></script>
+</body>
+</html>

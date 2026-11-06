@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>تسجيل الدخول — منصة طاهر البيلي</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%232563eb' stroke-width='2'%3E%3Cpath d='M22 10L12 5 2 10l10 5 10-5z'/%3E%3Cpath d='M6 12v5c0 1.7 2.7 3 6 3s6-1.3 6-3v-5'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<div class="auth-page">
+  <div class="auth-brand"><a class="logo" href="index.html"><span class="mark" id="logoMark"></span><span>منصة طاهر البيلي</span></a></div>
+
+  <div class="auth-card">
+    <div class="auth-head">
+      <div class="tabs" id="authTabs">
+        <button class="active" data-tab="login">تسجيل الدخول</button>
+        <button data-tab="register">حساب جديد</button>
+      </div>
+    </div>
+
+    <div class="auth-body">
+
+      <!-- دخول الطالب -->
+      <form id="loginForm" novalidate>
+        <div class="field">
+          <label>البريد الإلكتروني</label>
+          <input type="email" id="liEmail" placeholder="you@example.com" autocomplete="email" required>
+        </div>
+        <div class="field">
+          <label>كلمة المرور</label>
+          <input type="password" id="liPass" placeholder="••••••••" autocomplete="current-password" required>
+        </div>
+        <p class="err hidden" id="liErr"></p>
+        <button type="submit" class="btn btn-primary btn-block btn-lg mt-1">دخول إلى حسابي</button>
+        <p class="text-center mt-2" style="font-size:13.5px">ليس لديك حساب؟ <a href="#" id="goRegister" style="color:var(--secondary);font-weight:800">أنشئ حسابك المجاني</a></p>
+      </form>
+
+      <!-- حساب جديد -->
+      <form id="registerForm" class="hidden" novalidate>
+        <div class="field">
+          <label>الاسم الكامل <span class="req">*</span></label>
+          <input type="text" id="rgName" placeholder="مثال: اسمك الكامل" required>
+        </div>
+        <div class="field">
+          <label>البريد الإلكتروني <span class="req">*</span></label>
+          <input type="email" id="rgEmail" placeholder="you@example.com" required>
+        </div>
+        <div class="field">
+          <label>رقم الهاتف</label>
+          <input type="tel" id="rgPhone" placeholder="01xxxxxxxxx">
+        </div>
+        <div class="form-grid">
+          <div class="field">
+            <label>كلمة المرور <span class="req">*</span></label>
+            <input type="password" id="rgPass" placeholder="6 أحرف على الأقل" required>
+          </div>
+          <div class="field">
+            <label>تأكيد كلمة المرور <span class="req">*</span></label>
+            <input type="password" id="rgPass2" placeholder="أعد كتابتها" required>
+          </div>
+        </div>
+        <p class="err hidden" id="rgErr"></p>
+        <button type="submit" class="btn btn-primary btn-block btn-lg mt-1">إنشاء حسابي</button>
+        <p class="text-center mt-2" style="font-size:13.5px">لديك حساب بالفعل؟ <a href="#" id="goLogin" style="color:var(--secondary);font-weight:800">سجّل الدخول</a></p>
+      </form>
+
+    </div>
+  </div>
+</div>
+
+<script src="js/icons.js"></script>
+<script src="js/data.js"></script>
+<script src="js/ui.js"></script>
+<script src="js/auth.js"></script>
+</body>
+</html>
