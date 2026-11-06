@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>منصة طاهر البيلي — تعلّم مهارات تغيّر مستقبلك</title>
+<meta name="description" content="منصة تعليمية إلكترونية متكاملة: دورات عربية احترافية، متابعة تقدمك، اختبارات تفاعلية، وشهادات إتمام معتمدة.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%232563eb' stroke-width='2'%3E%3Cpath d='M22 10L12 5 2 10l10 5 10-5z'/%3E%3Cpath d='M6 12v5c0 1.7 2.7 3 6 3s6-1.3 6-3v-5'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<!-- شريط الإعلانات -->
+<div id="announceBar" class="announce-bar" style="display:none"></div>
+
+<!-- الهيدر -->
+<header class="site-header">
+  <div class="container header-inner">
+    <a class="logo" href="index.html">
+      <span class="mark" id="logoMark"></span>
+      <span id="brandName">منصة طاهر البيلي</span>
+    </a>
+    <nav class="main-nav" id="mainNav">
+      <a href="index.html" data-nav="home">الرئيسية</a>
+      <a href="courses.html" data-nav="courses">الدورات</a>
+      <a href="#features">المميزات</a>
+      <a href="#how">كيف تبدأ</a>
+      <a href="#faq">الأسئلة الشائعة</a>
+      <a href="#contact">تواصل معنا</a>
+    </nav>
+    <div class="header-actions">
+      <button class="icon-btn" data-theme-toggle aria-label="تبديل الوضع الليلي"></button>
+      <div id="authArea" class="flex" style="gap:8px"></div>
+      <button class="icon-btn burger" id="burger" aria-label="القائمة"></button>
+    </div>
+  </div>
+  <nav class="mobile-nav" id="mobileNav">
+    <a href="index.html" data-nav="home">الرئيسية</a>
+    <a href="courses.html" data-nav="courses">الدورات</a>
+    <a href="#features">المميزات</a>
+    <a href="#how">كيف تبدأ</a>
+    <a href="#faq">الأسئلة الشائعة</a>
+    <div id="authAreaM" class="flex" style="gap:8px;padding:10px 14px;flex-wrap:wrap"></div>
+  </nav>
+</header>
+
+<!-- قسم البطل Hero -->
+<section class="hero">
+  <div class="container hero-inner">
+    <div class="hero-copy">
+      <span class="hero-tag" id="heroTag"></span>
+      <h1 id="heroTitle"></h1>
+      <p id="heroSubtitle"></p>
+      <div class="hero-cta">
+        <a href="courses.html" class="btn btn-light btn-lg" id="heroBtn"></a>
+        <a href="#how" class="btn btn-glass btn-lg">كيف تعمل المنصة؟</a>
+      </div>
+      <div class="hero-stats">
+        <div class="hst"><b>+<span id="cntStudents" data-cnt="0">0</span></b><span>طالب وطالبة</span></div>
+        <div class="hst"><b><span data-cnt-courses>0</span></b><span>دورة احترافية</span></div>
+        <div class="hst"><b>+<span id="cntHours" data-cnt="0">0</span></b><span>ساعة تدريبية</span></div>
+        <div class="hst"><b><span id="cntSat" data-cnt="0">0</span>%</b><span>نسبة الرضا</span></div>
+      </div>
+    </div>
+    <div class="hero-visual">
+      <img class="hero-photo" src="assets/hero.jpg" alt="أ. طاهر البيلي" width="1200" height="1600">
+    </div>
+  </div>
+</section>
+
+<!-- الدورات المميزة -->
+<section class="section" id="featured">
+  <div class="container">
+    <div class="section-head">
+      <span class="kicker" id="k1"></span>
+      <h2 class="section-title">الدورات المميزة</h2>
+      <p class="section-sub">أفضل دوراتنا تقييماً من الطلاب — محتوى عربي احترافي مع تطبيق عملي مباشر.</p>
+    </div>
+    <div class="grid-3" id="featuredGrid"></div>
+    <div class="text-center mt-3">
+      <a href="courses.html" class="btn btn-outline btn-lg">تصفح جميع الدورات <span id="arr1"></span></a>
+    </div>
+  </div>
+</section>
+
+<!-- مميزات المنصة -->
+<section class="section" id="features" style="background:color-mix(in srgb,var(--muted-bg) 40%,transparent)">
+  <div class="container">
+    <div class="section-head">
+      <span class="kicker" id="k2"></span>
+      <h2 class="section-title">لماذا منصة طاهر البيلي؟</h2>
+      <p class="section-sub">كل ما تحتاجه لتجربة تعلم رقمية متكاملة في مكان واحد.</p>
+    </div>
+    <div class="grid-3" id="featuresGrid"></div>
+  </div>
+</section>
+
+<!-- طريقة الاستخدام -->
+<section class="section" id="how">
+  <div class="container">
+    <div class="section-head">
+      <span class="kicker" id="k3"></span>
+      <h2 class="section-title">ابدأ في 4 خطوات بسيطة</h2>
+      <p class="section-sub">رحلتك التعليمية تبدأ من هنا وستلاحظ التطور من أول أسبوع.</p>
+    </div>
+    <div class="steps" id="stepsRow"></div>
+  </div>
+</section>
+
+<!-- الإحصائيات -->
+<section class="section">
+  <div class="container">
+    <div class="stats-band" id="statsBand"></div>
+  </div>
+</section>
+
+<!-- آخر المقالات -->
+<section class="section" id="news" style="padding-top:0">
+  <div class="container">
+    <div class="section-head">
+      <span class="kicker" id="k5"></span>
+      <h2 class="section-title">أخبار ومقالات تعليمية</h2>
+      <p class="section-sub">نصائح ومستجدات من فريق المنصة لمساعدتك في رحلتك التعليمية.</p>
+    </div>
+    <div class="grid-3" id="newsGrid"></div>
+  </div>
+</section>
+
+<!-- الأسئلة الشائعة -->
+<section class="section" id="faq" style="background:color-mix(in srgb,var(--muted-bg) 40%,transparent)">
+  <div class="container" style="max-width:820px">
+    <div class="section-head">
+      <span class="kicker" id="k6"></span>
+      <h2 class="section-title">الأسئلة الشائعة</h2>
+      <p class="section-sub">كل ما تحتاج معرفته قبل البدء. لم تجد إجابتك؟ تواصل معنا.</p>
+    </div>
+    <div id="faqList"></div>
+  </div>
+</section>
+
+<!-- دعوة للتسجيل CTA -->
+<section class="section">
+  <div class="container">
+    <div class="cta-panel" id="contact">
+      <h2>جاهز لتبدأ رحلتك التعليمية؟</h2>
+      <p>انضم لآلاف الطلاب الذين يطورون مهاراتهم كل يوم على منصة طاهر البيلي. أنشئ حسابك المجاني الآن واختر دورتك الأولى.</p>
+      <a href="login.html?tab=register" class="btn btn-lg">أنشئ حسابك المجاني الآن</a>
+    </div>
+  </div>
+</section>
+
+<!-- الفوتر -->
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a class="logo" href="index.html"><span class="mark" id="logoMarkF"></span><span id="ftSiteName">منصة طاهر البيلي</span></a>
+        <p>منصة تعليمية إلكترونية متكاملة تقدم دورات عربية احترافية مع متابعة التقدم والاختبارات والشهادات، ولوحة إدارة متكاملة للمحتوى والطلاب.</p>
+        <div class="socials">
+          <a href="#" aria-label="تويتر" id="soTw"></a>
+          <a href="#" aria-label="فيسبوك" id="soFb"></a>
+          <a href="#" aria-label="انستجرام" id="soIg"></a>
+          <a href="#" aria-label="لينكدإن" id="soLi"></a>
+          <a href="#" aria-label="يوتيوب" id="soYt"></a>
+        </div>
+      </div>
+      <div class="footer-col">
+        <h4>روابط سريعة</h4>
+        <a href="index.html">الرئيسية</a>
+        <a href="courses.html">جميع الدورات</a>
+        <a href="#features">مميزات المنصة</a>
+        <a href="#faq">الأسئلة الشائعة</a>
+        <a href="login.html">تسجيل الدخول</a>
+      </div>
+      <div class="footer-col">
+        <h4>الحسابات</h4>
+        <a href="login.html?tab=register">إنشاء حساب طالب</a>
+        <a href="dashboard.html">لوحة الطالب</a>
+        <a href="certificate.html">التحقق من شهادة</a>
+      </div>
+      <div class="footer-col">
+        <h4>تواصل معنا</h4>
+        <ul class="footer-contact">
+          <li id="fcMail"></li>
+          <li id="fcPhone"></li>
+          <li id="fcAddr"></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© <span id="ftYear">2026</span> <span id="ftSiteName2">منصة طاهر البيلي</span> — جميع الحقوق محفوظة.</span>
+      <span>صُممت ووُطّنت بعناية لخدمة المتعلم العربي.</span>
+    </div>
+  </div>
+</footer>
+
+<script src="js/icons.js"></script>
+<script src="js/data.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
+    <script src="js/firebase-config.js"></script>
+    <script src="js/firebase-sync.js"></script>
+<script src="js/ui.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>
