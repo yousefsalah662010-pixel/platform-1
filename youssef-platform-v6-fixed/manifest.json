@@ -1,0 +1,13 @@
+{
+  "name": "منصة يوسف صلاح التعليمية",
+  "short_name": "يوسف صلاح",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#070b1f",
+  "theme_color": "#070b1f",
+  "lang": "ar",
+  "dir": "rtl",
+  "icons": [
+    { "src": "/icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" }
+  ]
+}

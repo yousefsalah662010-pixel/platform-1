@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>بوابة ولي الأمر</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#060912; --bg-mid:#0b1024; --glass:rgba(255,255,255,0.06); --glass-3:rgba(255,255,255,0.14);
+    --text:#e5e7f0; --text-dim:#a5acc0; --text-mute:#6b7390;
+    --gold:#fbbf24; --gold-deep:#f59e0b;
+    --grad-aurora:linear-gradient(135deg,#8b5cf6,#06b6d4,#ec4899);
+    --grad-success:linear-gradient(135deg,#10b981,#06b6d4);
+    --success:#10b981;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{ font-family:'Cairo',sans-serif; background:var(--bg); color:var(--text); min-height:100vh;
+    background-image: radial-gradient(circle at 18% 18%, rgba(139,92,246,0.16), transparent 42%),
+                      radial-gradient(circle at 82% 78%, rgba(6,182,212,0.13), transparent 42%),
+                      radial-gradient(circle at 50% 50%, rgba(236,72,153,0.06), transparent 55%);
+    padding:20px; }
+  .wrap{ max-width:880px; margin:auto; }
+  .header{ text-align:center; margin-bottom:22px; }
+  .logo{ font-size:26px; font-weight:900; background:var(--grad-aurora); -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent; }
+  .sub{ color:var(--text-mute); font-size:13px; margin-top:6px; }
+  .card{ background:var(--glass); backdrop-filter:blur(14px); -webkit-backdrop-filter:blur(14px); border:1px solid var(--glass-3); border-radius:16px; padding:20px; margin-bottom:16px; }
+  .stuHead{ display:flex; gap:16px; align-items:center; flex-wrap:wrap; }
+  .stuHead .avatar{ width:74px; height:74px; border-radius:50%; object-fit:cover; border:2px solid var(--gold); }
+  .stuHead .ph{ width:74px;height:74px;border-radius:50%;background:var(--grad-aurora);display:flex;align-items:center;justify-content:center;font-size:32px;color:#fff; font-weight:900; }
+  .stuName{ font-size:22px; font-weight:900; color:#fff; }
+  .stuMeta{ font-size:13px; color:var(--text-mute); margin-top:5px; line-height:1.7; }
+  .levelBadge{ font-size:15px; font-weight:900; padding:7px 16px; border-radius:20px; white-space:nowrap; }
+  .summary{ display:grid; grid-template-columns:repeat(auto-fit,minmax(140px,1fr)); gap:12px; margin-bottom:16px; }
+  .stat{ background:var(--glass); backdrop-filter:blur(12px); border:1px solid var(--glass-3); border-radius:14px; padding:16px; text-align:center; }
+  .stat .num{ font-size:24px; font-weight:900; }
+  .stat small{ color:var(--text-mute); font-size:12px; display:block; margin-top:4px; }
+  .sectionTitle{ color:#c4b5fd; font-weight:700; font-size:17px; margin:18px 4px 10px; display:flex; align-items:center; gap:6px; }
+  .course{ background:var(--glass); backdrop-filter:blur(12px); border:1px solid var(--glass-3); border-radius:14px; padding:16px; margin-bottom:12px; }
+  .course h4{ color:#fff; font-size:15px; margin-bottom:8px; }
+  .pbar{ background:rgba(255,255,255,0.08); border-radius:20px; height:10px; overflow:hidden; margin:5px 0; }
+  .pbar div{ background:var(--grad-success); height:100%; transition:width 0.6s; box-shadow:0 0 12px rgba(16,185,129,0.4); }
+  .plabel{ font-size:12px; color:var(--text-dim); }
+  .gradeLine{ font-size:13px; color:var(--text-dim); margin-top:8px; line-height:1.9; }
+  .gradeLine b{ color:#fff; }
+  .behavior{ background:var(--glass); border:1px solid var(--glass-3); border-radius:12px; padding:12px 14px; margin-bottom:8px; font-size:13px; }
+  .bhGood{ border-right:4px solid #22c55e; }
+  .bhBad{ border-right:4px solid #f43f5e; }
+  .bhWarn{ border-right:4px solid #eab308; }
+  .behavior small{ color:var(--text-mute); display:block; margin-top:4px; font-size:11px; }
+  .loading{ text-align:center; padding:70px; color:var(--text-mute); font-size:15px; }
+  .errorBox{ text-align:center; padding:50px 20px; }
+  .errorBox .icon{ font-size:54px; margin-bottom:14px; }
+  .footer{ text-align:center; color:var(--text-mute); font-size:12px; margin-top:24px; line-height:1.8; }
+  .warnBox{ background:rgba(244,63,94,0.12); border:1px solid rgba(244,63,94,0.35); }
+  details summary{ cursor:pointer; outline:none; }
+  @media(max-width:600px){ .stuHead{ flex-direction:column; text-align:center; } .summary{ grid-template-columns:repeat(2,1fr); } }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="header">
+    <div class="logo">🌟 بوابة ولي الأمر</div>
+    <div class="sub">تابع مستوى ابنك الدراسي وسلوكه وتقدّمه في الدروس</div>
+  </div>
+  <div id="content"><div class="loading">⏳ بيجيب بيانات ابنك...</div></div>
+  <div class="footer">🔒 هذه البوابة خاصة بمتابعة ولي الأمر — الرابط آمن وشخصي لكل طالب، والبيانات بتتحدّث لحظيًا.</div>
+</div>
+<script>
+const esc = s => String(s??'').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+const fmt = n => (typeof n==='number' && !Number.isInteger(n)) ? n.toFixed(1) : n;
+
+async function init(){
+  const params = new URLSearchParams(location.search);
+  const t = params.get('t');
+  const el = document.getElementById('content');
+  if(!t){
+    el.innerHTML = errorBox('🔗','رابط غير صالح','الرابط ده مش صحيح. لو أنت ولي أمر، تواصل مع الإدارة علشان تبعتلك رابط المتابعة الخاص بابنك.');
+    return;
+  }
+  try {
+    const r = await fetch('/api/parent?t=' + encodeURIComponent(t));
+    if(!r.ok){
+      const d = await r.json().catch(()=>({}));
+      el.innerHTML = errorBox('🚫','الرابط غير صالح', d.error || 'الرابط ده مش صحيح أو منتهي. تواصل مع الإدارة لو عندك مشكلة.');
+      return;
+    }
+    const d = await r.json();
+    if(d.error){ el.innerHTML = errorBox('🚫','الرابط غير صالح', d.error); return; }
+    render(d);
+  } catch(e){
+    el.innerHTML = errorBox('⚠️','حصل خطأ','تعذّر جلب البيانات. تأكد من الإنترنت وحاول تاني بعد شوية.');
+  }
+}
+
+function errorBox(icon,title,msg){
+  return `<div class="card errorBox"><div class="icon">${icon}</div>
+    <h2 style="color:#fff;margin-bottom:10px;">${esc(title)}</h2>
+    <div style="color:var(--text-dim);line-height:1.8;">${esc(msg)}</div></div>`;
+}
+
+function render(d){
+  const u = d.user, lv = d.level;
+  const totalWatched = d.courses.reduce((a,c)=>a+c.watchedVideos,0);
+  const totalVideos = d.courses.reduce((a,c)=>a+c.totalVideos,0);
+  const totalLessons = d.courses.reduce((a,c)=>a+c.totalLessons,0);
+  const viewedLessons = d.courses.reduce((a,c)=>a+c.viewedLessons,0);
+  document.getElementById('content').innerHTML = `
+    <div class="card">
+      <div class="stuHead">
+        ${u.profile_pic ? `<img class="avatar" src="${u.profile_pic}">` : `<div class="ph">${esc((u.first_name||'?')[0])}</div>`}
+        <div style="flex:1;min-width:200px;">
+          <div class="stuName">${esc(u.first_name+' '+u.last_name)}</div>
+          <div class="stuMeta">🎓 السنة الدراسية: ${esc(u.grade)}<br>📞 هاتف الطالب: ${esc(u.phone)}</div>
+        </div>
+        <span class="levelBadge" style="background:${lv.color}22;color:${lv.color};border:1px solid ${lv.color}55;">${lv.emoji} ${lv.name}</span>
+      </div>
+    </div>
+
+    <div class="summary">
+      <div class="stat"><div class="num" style="color:#c4b5fd;">${totalWatched}<span style="font-size:13px;color:var(--text-mute);">/${totalVideos}</span></div><small>فيديوهات اتمشاهدت</small></div>
+      <div class="stat"><div class="num" style="color:var(--gold);">${d.grade_avg>0?Math.round(d.grade_avg)+'%':'—'}</div><small>متوسط الدرجات</small></div>
+      <div class="stat"><div class="num" style="color:#06b6d4;">${viewedLessons}/${totalLessons}</div><small>دروس مكتملة</small></div>
+      <div class="stat"><div class="num" style="color:${d.disabled?'#f43f5e':'#22c55e'};">${d.disabled?'معطل':'نشط'}</div><small>حالة الحساب</small></div>
+    </div>
+
+    ${(d.disabled || d.parent_call) ? `<div class="card warnBox">
+      <div style="color:#fda4af;font-weight:700;font-size:14px;line-height:1.7;">
+        ${d.disabled ? '🚫 حساب ابنك معطّل حاليًا' : '📞 الإدارة طلبت تواصل ولي الأمر'} — يرجى التواصل مع إدارة المنصة في أسرع وقت لمتابعة الوضع وحلّه.
+      </div>
+    </div>` : ''}
+
+    <div class="sectionTitle">📚 الكورسات والتقدّم</div>
+    ${d.courses.length ? d.courses.map(c=>{
+      const lPct = c.totalLessons ? Math.round(c.viewedLessons/c.totalLessons*100) : 0;
+      const vPct = c.totalVideos ? Math.round(c.watchedVideos/c.totalVideos*100) : 0;
+      return `<div class="course">
+        <h4>${esc(c.emoji||'📚')} ${esc(c.course_name)}</h4>
+        <div class="plabel">الدروس المكتملة: ${c.viewedLessons}/${c.totalLessons} (${lPct}%)</div>
+        <div class="pbar"><div style="width:${lPct}%"></div></div>
+        <div class="plabel">الفيديوهات المشاهدة: ${c.watchedVideos}/${c.totalVideos} (${vPct}%)</div>
+        <div class="pbar"><div style="width:${vPct}%"></div></div>
+        ${c.lessonProgress && c.lessonProgress.length ? `<details style="margin-top:8px;"><summary style="font-size:12px;color:var(--text-dim);">تفاصيل كل درس</summary><div style="font-size:12px;margin-top:6px;line-height:2;">${c.lessonProgress.map(lp=>`${lp.viewed?'✅':'⬜'} ${esc(lp.title)} — ${lp.videos_watched}/${lp.videos_total} فيديو`).join('<br>')}</div></details>` : ''}
+        ${c.examGrades && c.examGrades.length ? `<div class="gradeLine">📝 الامتحانات: ${c.examGrades.map(g=>`${esc(g.exam_title)}: <b>${fmt((g.score||0)+(g.essay_score||0))}/${g.max_points||0}</b>${g.essay_pending?' ⏳ يستنى التصحيح':''}`).join(' | ')}</div>` : '<div class="gradeLine" style="color:var(--text-mute);">مفيش امتحانات اتعملت</div>'}
+        ${c.manualGrades && c.manualGrades.length ? `<div class="gradeLine">📊 الدرجات المسجّلة: ${c.manualGrades.map(g=>`${esc(g.title)} <b>${fmt(g.score)}/${fmt(g.max_score)}</b>`).join(' | ')}</div>` : ''}
+      </div>`;
+    }).join('') : '<div class="card" style="text-align:center;color:var(--text-mute);padding:30px;">ابنك مش مشترك في أي كورس لسه</div>'}
+
+    <div class="sectionTitle">📋 سجل السلوك</div>
+    ${d.behavior && d.behavior.length ? d.behavior.map(b=>{
+      const cls = b.kind==='good'?'bhGood':b.kind==='bad'?'bhBad':'bhWarn';
+      const icon = b.kind==='good'?'🌟':b.kind==='bad'?'⚠️':'📝';
+      return `<div class="behavior ${cls}"><div>${icon} ${esc(b.note)} ${b.course_name?'<small style="display:inline;margin:0;">('+esc(b.course_name)+')</small>':''}</div><small>${new Date(b.created_at).toLocaleString('ar-EG')}</small></div>`;
+    }).join('') : '<div class="card" style="text-align:center;color:var(--text-mute);padding:24px;">مفيش سجلات سلوك مسجّلة لابنك</div>'}
+
+    <div class="card" style="font-size:12px;color:var(--text-mute);text-align:center;line-height:1.9;">
+      🔒 البيانات دي بتتحدّث لحظيًا مع تقدّم ابنك في الدروس والفيديوهات والامتحانات.<br>
+      لو عندك أي استفسار عن المستوى أو السلوك، تواصل مع إدارة المنصة.
+    </div>
+  `;
+}
+
+init();
+</script>
+</body>
+</html>

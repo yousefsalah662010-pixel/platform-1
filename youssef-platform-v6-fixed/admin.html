@@ -1,0 +1,878 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>لوحة المدير — منصة يوسف صلاح</title>
+<meta name="theme-color" content="#070b1f">
+<link rel="icon" href="/icon.svg">
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; font-family:'Cairo',sans-serif; }
+  :root{
+    --bg-deep:#070b1f;
+    --bg-mid:#0f1335;
+    --glass:rgba(255,255,255,0.06);
+    --glass-3:rgba(255,255,255,0.14);
+    --aurora1:#8b5cf6;
+    --aurora2:#ec4899;
+    --aurora3:#06b6d4;
+    --gold:#fbbf24;
+    --gold-deep:#f59e0b;
+    --text:#f1f5f9;
+    --text-dim:#94a3b8;
+    --text-mute:#64748b;
+    --success:#10b981;
+    --error:#f43f5e;
+    --grad-aurora:linear-gradient(135deg,#8b5cf6 0%,#ec4899 50%,#06b6d4 100%);
+    --grad-gold:linear-gradient(135deg,#fbbf24,#f59e0b);
+    --grad-success:linear-gradient(135deg,#10b981,#059669);
+    --glow-aurora:0 0 40px rgba(139,92,246,0.35);
+  }
+  body { background:var(--bg-deep); color:var(--text); min-height:100vh; overflow-x:hidden; }
+  .hidden { display:none !important; }
+
+  /* خلفية الشفق */
+  .aurora-bg{ position:fixed; inset:0; z-index:-2; background:radial-gradient(ellipse at top,#1a1040 0%,var(--bg-deep) 60%); overflow:hidden; }
+  .aurora-bg .orb{ position:absolute; border-radius:50%; filter:blur(70px); opacity:0.45; }
+  .aurora-bg .o1{ width:480px; height:480px; background:radial-gradient(circle,#8b5cf6,transparent 70%); top:-140px; right:-100px; animation:floatA 22s ease-in-out infinite; }
+  .aurora-bg .o2{ width:420px; height:420px; background:radial-gradient(circle,#06b6d4,transparent 70%); bottom:-120px; left:-80px; animation:floatB 28s ease-in-out infinite; }
+  @keyframes floatA{0%,100%{transform:translate(0,0)}50%{transform:translate(-80px,70px)}}
+  @keyframes floatB{0%,100%{transform:translate(0,0)}50%{transform:translate(70px,-60px)}}
+
+  /* شاشة الدخول */
+  #loginBox{ max-width:420px; margin:80px auto; background:var(--glass); backdrop-filter:blur(24px); -webkit-backdrop-filter:blur(24px);
+    border:1px solid var(--glass-3); padding:40px; border-radius:22px; box-shadow:0 25px 70px rgba(0,0,0,0.5);
+    position:relative; overflow:hidden; animation:cardIn 0.7s cubic-bezier(0.2,0.9,0.3,1.2); }
+  #loginBox::before{ content:''; position:absolute; inset:-1px; border-radius:22px; padding:1px;
+    background:var(--grad-aurora); -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);
+    -webkit-mask-composite:xor; mask-composite:exclude; opacity:0.5; pointer-events:none; }
+  @keyframes cardIn{0%{opacity:0;transform:translateY(30px) scale(0.96)}100%{opacity:1;transform:none}}
+  #loginBox h1{ text-align:center; margin-bottom:22px; font-size:26px; font-weight:900;
+    background:var(--grad-aurora); -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent;
+    background-size:200% auto; animation:shine 4s linear infinite; }
+  @keyframes shine{0%{background-position:0% center}100%{background-position:200% center}}
+  .loginCrown{ text-align:center; font-size:48px; margin-bottom:8px;
+    background:var(--grad-gold); -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent;
+    filter:drop-shadow(0 0 20px rgba(251,191,36,0.5)); }
+
+  input, select, textarea{ width:100%; padding:12px 14px; border:1px solid var(--glass-3); border-radius:11px;
+    font-family:'Cairo'; margin-bottom:12px; font-size:14px; background:rgba(255,255,255,0.04); color:var(--text);
+    transition:all 0.25s; }
+  input::placeholder, textarea::placeholder{ color:var(--text-mute); }
+  input:focus, select:focus, textarea:focus{ outline:none; border-color:var(--aurora1); background:rgba(139,92,246,0.08); box-shadow:0 0 0 3px rgba(139,92,246,0.15); }
+  select option{ background:var(--bg-mid); color:var(--text); }
+  button{ background:var(--grad-aurora); background-size:150% auto; color:#fff; border:none; padding:12px 22px; border-radius:11px;
+    font-family:'Cairo'; font-weight:700; cursor:pointer; font-size:14px; transition:all 0.3s;
+    box-shadow:0 5px 16px rgba(139,92,246,0.35); }
+  button:hover{ background-position:right center; transform:translateY(-1px); box-shadow:0 7px 22px rgba(139,92,246,0.5); }
+
+  /* الهيدر */
+  header{ background:rgba(15,19,53,0.7); backdrop-filter:blur(20px); -webkit-backdrop-filter:blur(20px);
+    border-bottom:1px solid var(--glass-3); color:#fff; padding:15px 25px; display:flex; justify-content:space-between;
+    align-items:center; flex-wrap:wrap; gap:10px; position:sticky; top:0; z-index:50; box-shadow:0 4px 25px rgba(0,0,0,0.3); }
+  header h1{ font-size:20px; display:flex; align-items:center; gap:12px; font-weight:900; }
+  header h1 .grad{ background:var(--grad-aurora); -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent; }
+  header button{ background:rgba(255,255,255,0.12); border:1px solid var(--glass-3); box-shadow:none; }
+  header button:hover{ background:rgba(255,255,255,0.2); }
+  .stuRing{ background:var(--grad-success); border:2px solid var(--gold); border-radius:50%; width:56px; height:56px;
+    display:flex; flex-direction:column; align-items:center; justify-content:center; font-size:8px; color:#fff;
+    box-shadow:0 0 25px rgba(251,191,36,0.4); }
+  .stuRing span:first-child{ font-size:16px; font-weight:900; line-height:1; }
+
+  /* التبويبات */
+  .tabs{ display:flex; gap:8px; padding:15px 25px; flex-wrap:wrap; background:rgba(15,19,53,0.5);
+    backdrop-filter:blur(14px); border-bottom:1px solid var(--glass-3); position:sticky; top:73px; z-index:40; }
+  .tabs button{ background:rgba(255,255,255,0.05); border:1px solid var(--glass-3); color:var(--text-dim); box-shadow:none; }
+  .tabs button:hover{ background:rgba(139,92,246,0.15); color:#fff; transform:none; box-shadow:none; }
+  .tabs button.active{ background:var(--grad-aurora); color:#fff; border-color:transparent;
+    box-shadow:0 4px 18px rgba(139,92,246,0.4); }
+
+  .content{ max-width:960px; margin:auto; padding:25px; }
+  h2{ color:#fff; margin-bottom:15px; font-size:21px; font-weight:900;
+    background:var(--grad-aurora); -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent; }
+  h3{ color:#fff; margin:15px 0 8px; font-size:17px; font-weight:700; }
+
+  .card{ background:var(--glass); backdrop-filter:blur(14px); -webkit-backdrop-filter:blur(14px);
+    border:1px solid var(--glass-3); border-radius:15px; padding:20px; margin-bottom:15px;
+    box-shadow:0 5px 18px rgba(0,0,0,0.25); transition:all 0.3s; }
+  .card:hover{ border-color:rgba(139,92,246,0.35); }
+  .card .info{ font-size:13px; color:var(--text-dim); margin-bottom:8px; }
+  .card .txt{ background:rgba(139,92,246,0.1); border:1px solid rgba(139,92,246,0.2);
+    padding:11px; border-radius:10px; margin-bottom:10px; font-size:14px; color:var(--text); }
+  .row2{ display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+  .row3{ display:grid; grid-template-columns:1fr 1fr 1fr; gap:12px; }
+
+  table{ width:100%; border-collapse:collapse; background:var(--glass); backdrop-filter:blur(12px);
+    border:1px solid var(--glass-3); border-radius:13px; overflow:hidden; box-shadow:0 5px 18px rgba(0,0,0,0.25); }
+  th, td{ padding:12px; text-align:right; font-size:13px; border-bottom:1px solid var(--glass-3); color:var(--text); }
+  th{ background:var(--grad-aurora); color:#fff; font-weight:700; }
+  tr:hover td{ background:rgba(139,92,246,0.08); }
+  tr:last-child td{ border-bottom:none; }
+
+  .badgeUsed{ background:rgba(244,63,94,0.18); border:1px solid rgba(244,63,94,0.35); color:#fda4af; padding:3px 10px; border-radius:20px; font-size:12px; font-weight:700; }
+  .badgeFree{ background:rgba(16,185,129,0.18); border:1px solid rgba(16,185,129,0.35); color:#6ee7b7; padding:3px 10px; border-radius:20px; font-size:12px; font-weight:700; }
+  .badgeOff{ background:rgba(244,63,94,0.18); border:1px solid rgba(244,63,94,0.35); color:#fda4af; padding:3px 10px; border-radius:20px; font-size:12px; font-weight:700; }
+  .badgeOn{ background:rgba(16,185,129,0.18); border:1px solid rgba(16,185,129,0.35); color:#6ee7b7; padding:3px 10px; border-radius:20px; font-size:12px; font-weight:700; }
+
+  .btnSm{ padding:7px 14px; font-size:12px; border-radius:9px; box-shadow:none; }
+  .btnSm:hover{ transform:translateY(-1px); }
+  .btnGreen{ background:var(--grad-success) !important; box-shadow:0 3px 12px rgba(16,185,129,0.3) !important; }
+  .btnRed{ background:linear-gradient(135deg,#f43f5e,#be123c) !important; box-shadow:0 3px 12px rgba(244,63,94,0.3) !important; }
+  .btnGray{ background:rgba(255,255,255,0.1) !important; border:1px solid var(--glass-3) !important; color:var(--text-dim) !important; box-shadow:none !important; }
+  .btnGray:hover{ background:rgba(255,255,255,0.18) !important; color:#fff !important; }
+  .btnOrange{ background:linear-gradient(135deg,#fbbf24,#f59e0b) !important; color:#0f1335 !important; box-shadow:0 3px 12px rgba(251,191,36,0.3) !important; }
+
+  .statusBox{ padding:11px 16px; border-radius:11px; font-weight:700; font-size:14px; margin-bottom:12px; border:1px solid var(--glass-3); }
+  .stOpen{ background:rgba(16,185,129,0.15); color:#6ee7b7; border-color:rgba(16,185,129,0.35); }
+  .stClosed{ background:rgba(255,255,255,0.05); color:var(--text-dim); }
+  .stResults{ background:rgba(251,191,36,0.15); color:var(--gold); border-color:rgba(251,191,36,0.35); }
+  .essayBox{ background:rgba(251,191,36,0.08); border:2px dashed rgba(251,191,36,0.4); border-radius:11px; padding:12px; margin-top:8px; }
+  .essayBox .ans{ background:rgba(255,255,255,0.05); padding:10px; border-radius:8px; font-size:13px; margin-bottom:8px; color:var(--text); }
+  small{ color:var(--text-mute); }
+
+  @media(max-width:700px){ .row2,.row3{ grid-template-columns:1fr; } .tabs{ top:auto; } }
+
+  /* ═══ مودال ملف الطالب ═══ */
+  .modal{ position:fixed; inset:0; background:rgba(2,6,20,0.78); backdrop-filter:blur(8px); z-index:200;
+    display:flex; align-items:flex-start; justify-content:center; padding:30px 15px; overflow-y:auto; }
+  .modalBox{ background:var(--bg-mid, #0b1024); border:1px solid var(--glass-3); border-radius:20px;
+    padding:26px; max-width:820px; width:100%; box-shadow:0 30px 80px rgba(0,0,0,0.6); margin-bottom:40px; }
+  .modalClose{ position:left; float:left; background:rgba(244,63,94,0.18); border:1px solid rgba(244,63,94,0.4);
+    color:#fda4af; width:38px; height:38px; border-radius:50%; font-size:18px; cursor:pointer; }
+  .stuHead{ display:flex; gap:14px; align-items:center; flex-wrap:wrap; margin-bottom:16px; }
+  .stuHead img{ width:64px; height:64px; border-radius:50%; object-fit:cover; border:2px solid var(--gold); }
+  .levelBadge{ font-size:14px; font-weight:900; padding:6px 14px; border-radius:20px; }
+  .miniCard{ background:rgba(255,255,255,0.04); border:1px solid var(--glass-3); border-radius:13px; padding:14px; margin-bottom:12px; }
+  .miniCard h4{ color:#c4b5fd; font-size:15px; margin-bottom:8px; }
+  .pbar{ background:rgba(255,255,255,0.08); border-radius:20px; height:10px; overflow:hidden; margin:6px 0; }
+  .pbar div{ background:var(--grad-success, linear-gradient(135deg,#10b981,#06b6d4)); height:100%; transition:width 0.5s; }
+  .bhGood{ border-right:4px solid #22c55e; }
+  .bhBad{ border-right:4px solid #f43f5e; }
+  .bhWarn{ border-right:4px solid #eab308; }
+</style>
+</head>
+<body>
+
+<div class="aurora-bg"><div class="orb o1"></div><div class="orb o2"></div></div>
+
+<div id="loginBox">
+  <div class="loginCrown">👑</div>
+  <h1>لوحة المدير</h1>
+  <div id="loginMsg"></div>
+  <input id="aUser" placeholder="اسم المدير">
+  <input id="aPass" type="password" placeholder="الرقم السري">
+  <button style="width:100%;" onclick="adminLogin()">دخول</button>
+</div>
+
+<div id="adminApp" class="hidden">
+  <header>
+    <h1>👑 لوحة تحكم <span class="grad">يوسف صلاح</span>
+      <span class="stuRing">
+        <span id="adminStuCount">—</span>طالب
+      </span>
+    </h1>
+    <button onclick="adminLogout()">خروج</button>
+  </header>
+  <div class="tabs">
+    <button class="active" id="bt-msgs" onclick="showTab('msgs')">📨 الرسائل</button>
+    <button id="bt-courses" onclick="showTab('courses')">🎓 الكورسات والدروس</button>
+    <button id="bt-books" onclick="showTab('books')">📖 الكتب</button>
+    <button id="bt-exams" onclick="showTab('exams')">📝 الامتحانات</button>
+    <button id="bt-codes" onclick="showTab('codes')">🔑 الرموز</button>
+    <button id="bt-sug" onclick="showTab('sug')">💡 الاقتراحات</button>
+    <button id="bt-users" onclick="showTab('users')">👥 الطلاب</button>
+  </div>
+  <div class="content">
+    <div id="tab-msgs"><h2>رسائل الطلاب</h2><div id="msgsList"></div></div>
+
+    <div id="tab-courses" class="hidden">
+      <h2>الكورسات والدروس</h2>
+      <div class="card">
+        <div class="row2">
+          <input id="ncName" placeholder="اسم الكورس الجديد">
+          <input id="ncPrice" type="number" placeholder="السعر">
+        </div>
+        <div class="row2">
+          <input id="ncEmoji" placeholder="إيموجي (مثال: 📘)">
+          <input id="ncDesc" placeholder="وصف الكورس">
+        </div>
+        <button onclick="addCourse()">➕ إضافة كورس</button>
+      </div>
+      <div id="coursesList"></div>
+    </div>
+
+    <div id="tab-books" class="hidden">
+      <h2>الكتب 📖</h2>
+      <div class="card">
+        <input id="nbTitle" placeholder="اسم الكتاب">
+        <div class="row2">
+          <input id="nbPrice" type="number" placeholder="السعر">
+          <input id="nbEmoji" placeholder="إيموجي (مثال: 📗)">
+        </div>
+        <input id="nbPdf" placeholder="رابط ملف PDF (مثال: رابط Google Drive مباشر)">
+        <textarea id="nbDesc" placeholder="وصف الكتاب"></textarea>
+        <button onclick="addBook()">➕ إضافة كتاب</button>
+      </div>
+      <div id="booksList"></div>
+    </div>
+
+    <div id="tab-exams" class="hidden">
+      <h2>الامتحانات 📝</h2>
+      <div class="card">
+        <select id="examCourseSel"></select>
+        <div id="examStatusBox"></div>
+        <div id="examManage"></div>
+      </div>
+      <div id="examQuestionsArea"></div>
+    </div>
+
+    <div id="tab-codes" class="hidden">
+      <h2>رموز الدخول 🔑</h2>
+      <div class="card">
+        <div class="row2">
+          <select id="codeType" onchange="fillCodeItems()">
+            <option value="course">رمز لكورس</option>
+            <option value="book">رمز لكتاب</option>
+          </select>
+          <select id="codeItem"></select>
+        </div>
+        <div class="row2">
+          <input id="newCode" placeholder="اكتب الرمز أو ولّد واحد">
+          <div style="display:flex;gap:8px;">
+            <button class="btnGreen" style="flex:1;" onclick="addCode()">➕ إضافة</button>
+            <button class="btnGray" style="flex:1;" onclick="genCode()">🎲 توليد</button>
+          </div>
+        </div>
+        <button class="btnGray" onclick="loadCodes()">🔄 تحديث القايمة</button>
+      </div>
+      <div id="codesList"></div>
+    </div>
+    <div id="tab-resets" class="hidden">
+      <h2>🔑 طلبات استعادة كلمة المرور</h2>
+      <p style="font-size:13px;color:var(--text-dim);margin-bottom:15px;">الطالب يطلب → الرمز يظهر هنا → ابعت الرمز واتساب للطالب</p>
+      <button class="btnGray" onclick="loadResets()">🔄 تحديث</button>
+      <div id="resetsList" style="margin-top:15px;"></div>
+    </div>
+    <div id="tab-sug" class="hidden">
+      <h2>💡 اقتراحات الطلاب</h2>
+      <div id="sugList"></div>
+    </div>
+
+    <div id="tab-users" class="hidden">
+      <h2>الطلاب 👥</h2>
+      <div id="usersList"></div>
+    </div>
+  </div>
+</div>
+
+<div id="studentModal" class="modal hidden"></div>
+
+<script>
+const esc = s => String(s??'').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+let COURSES = [], BOOKS = [], currentExam = null;
+
+async function adminLogin(){
+  const r = await fetch('/api/admin/login',{method:'POST',headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({username:aUser.value,password:aPass.value})});
+  const d = await r.json();
+  if(d.ok){ showAdmin(); } else loginMsg.innerHTML='<div class="card" style="background:rgba(244,63,94,0.15);color:#fda4af;border:1px solid rgba(244,63,94,0.35);">'+esc(d.msg)+'</div>';
+}
+async function adminLogout(){ await fetch('/api/admin/logout',{method:'POST'}); location.reload(); }
+
+function showTab(t){
+  ['msgs','courses','books','exams','codes','sug','users'].forEach(x=>{
+    const tab = document.getElementById('tab-'+x);
+    const btn = document.getElementById('bt-'+x);
+    if(tab) tab.classList.toggle('hidden', x!==t);
+    if(btn) btn.classList.toggle('active', x===t);
+  });
+  if(t==='msgs') loadMsgs();
+  if(t==='codes') loadCodesTab();
+  if(t==='courses') loadCoursesTab();
+  if(t==='books') loadBooksTab();
+  if(t==='exams') loadExamsTab();
+  if(t==='users') loadUsers();
+  if(t==='sug') loadSug();
+}
+function showAdmin(){
+  document.getElementById('loginBox').classList.add('hidden');
+  document.getElementById('adminApp').classList.remove('hidden');
+  showTab('msgs');
+  fetch('/api/stats').then(r=>r.json()).then(d=>{
+    const el = document.getElementById('adminStuCount');
+    if(el) el.textContent = d.realStudents;
+  });
+}
+
+/* ═══ الرسائل ═══ */
+async function loadMsgs(){
+  const msgs = await fetch('/api/admin/messages').then(r=>r.json());
+  document.getElementById('msgsList').innerHTML = msgs.length ? msgs.map(m=>`
+    <div class="card">
+      <div class="info">👤 ${esc(m.first_name+' '+m.last_name)} | 📞 ${esc(m.phone)} | 🕐 ${esc(m.created_at)}</div>
+      <div class="txt">${esc(m.text)}</div>
+      <textarea id="rep-${m.id}" placeholder="اكتب ردك...">${esc(m.reply||'')}</textarea>
+      <button onclick="sendReply(${m.id})">📤 ${m.reply?'تعديل الرد':'إرسال الرد'}</button>
+      ${m.reply?`<span style="color:#6ee7b7;font-size:13px;font-weight:700;margin-right:10px;">✅ تم الرد</span>`:''}
+    </div>`).join('') : '<div class="card">مفيش رسائل</div>';
+}
+async function sendReply(id){
+  await fetch('/api/admin/reply',{method:'POST',headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({id, reply:document.getElementById('rep-'+id).value})});
+  loadMsgs();
+}
+
+/* ═══ الكورسات والدروس ═══ */
+async function loadCoursesTab(){
+  COURSES = await fetch('/api/admin/courses').then(r=>r.json());
+  document.getElementById('coursesList').innerHTML = COURSES.map(c=>`
+    <div class="card">
+      <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;">
+        <b>${esc(c.emoji||'📚')} ${esc(c.name)}</b>
+        <div>
+          <span style="color:var(--gold);font-weight:700;">${c.price} جنيه</span>
+          <button class="btnRed btnSm" onclick="delCourse(${c.id}, '${esc(c.name).replace(/'/g,"\\'")}')">🗑️ حذف الكورس</button>
+        </div>
+      </div>
+      <div style="margin-top:12px;">
+        <input id="lessonTitle-${c.id}" placeholder="عنوان الدرس الجديد" style="margin-bottom:8px;">
+        <input id="lessonDesc-${c.id}" placeholder="وصف الدرس (اختياري)">
+        <button class="btnGreen btnSm" onclick="addLesson(${c.id})">➕ إضافة درس</button>
+      </div>
+      <div id="lessons-${c.id}" style="margin-top:12px;"></div>
+    </div>`).join('') || '<div class="card">مفيش كورسات</div>';
+  for(const c of COURSES) loadLessonsList(c.id);
+}
+async function delCourse(id, name){
+  if(!confirm(`⚠️ حذف كورس "${name}" بالكامل؟\n\nهيتمسح: كل دروسه + امتحانه + رموزه + اشتراكات الطلاب فيه!\n\nالعملية مش بترجع تاني!`)) return;
+  if(!confirm('متأكد 100%؟ آخر تأكيد 😅')) return;
+  const r = await fetch('/api/admin/courses/delete',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({id})});
+  const d = await r.json();
+  if(d.ok){ alert('✅ الكورس اتمسح'); loadCoursesTab(); }
+  else alert(d.msg || 'حصل خطأ');
+}
+async function loadLessonsList(cid){
+  const ls = await fetch('/api/admin/lessons?course_id='+cid).then(r=>r.json());
+  const el = document.getElementById('lessons-'+cid);
+  if(!el) return;
+  el.innerHTML = ls.length ? ls.map((l,i)=>`
+    <div style="background:rgba(255,255,255,0.04);border:1px solid var(--glass-3);border-radius:12px;padding:14px;margin-top:12px;">
+      <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:6px;">
+        <b style="color:#fff;">${i+1}. ${esc(l.title)}</b>
+        <button class="btnRed btnSm" onclick="delLesson(${l.id}, '${esc(l.title).replace(/'/g,"\\'")}', ${cid})">🗑️ حذف الدرس</button>
+      </div>
+      ${l.description?`<div style="font-size:13px;color:var(--text-dim);margin-bottom:10px;line-height:1.7;">${esc(l.description)}</div>`:''}
+      <div style="font-size:12px;color:var(--text-mute);margin-bottom:6px;font-weight:700;">🎬 فيديوهات الدرس (${(l.videos||[]).length}):</div>
+      ${(l.videos||[]).length ? (l.videos||[]).map(v=>`
+        <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;background:rgba(139,92,246,0.08);border:1px solid rgba(139,92,246,0.25);border-radius:9px;padding:8px 12px;margin-bottom:6px;">
+          <span style="font-size:13px;color:var(--text);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:1;">${v.title?'<b style="color:#c4b5fd;">'+esc(v.title)+'</b> — ':''}<small style="color:var(--text-mute);">${esc(v.video_url)}</small></span>
+          <button class="btnRed btnSm" onclick="delVideo(${v.id}, ${cid})" style="flex-shrink:0;">🗑️</button>
+        </div>`).join('') : '<small style="color:var(--text-mute);display:block;margin-bottom:8px;">مفيش فيديوهات — ضيف فيديو من تحت 👇</small>'}
+      <div style="border-top:1px dashed var(--glass-3);padding-top:10px;margin-top:8px;">
+        <input id="vidTitle-${l.id}" placeholder="عنوان الفيديو (اختياري)" style="margin-bottom:6px;font-size:13px;padding:9px 12px;">
+        <input id="vidUrl-${l.id}" placeholder="رابط YouTube أو mp4" style="margin-bottom:6px;font-size:13px;padding:9px 12px;">
+        <input id="vidDesc-${l.id}" placeholder="وصف الفيديو (اختياري)" style="margin-bottom:8px;font-size:13px;padding:9px 12px;">
+        <button class="btnGreen btnSm" onclick="addVideo(${l.id}, ${cid})">➕ إضافة فيديو للدرس</button>
+      </div>
+    </div>`).join('') : '<small style="color:var(--text-mute);">مفيش دروس لسه — ضيف أول درس من فوق</small>';
+}
+async function addCourse(){
+  const r = await fetch('/api/admin/courses',{method:'POST',headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({name:ncName.value,description:ncDesc.value,price:ncPrice.value,emoji:ncEmoji.value})});
+  const d = await r.json();
+  if(d.ok){ alert('✅ اتضاف'); ncName.value=ncDesc.value=ncPrice.value=ncEmoji.value=''; loadCoursesTab(); }
+}
+async function addLesson(cid){
+  const titleEl = document.getElementById('lessonTitle-'+cid);
+  if(!titleEl.value.trim()){ alert('اكتب عنوان الدرس'); return; }
+  const r = await fetch('/api/admin/lessons',{method:'POST',headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({course_id:cid, title:titleEl.value, description:document.getElementById('lessonDesc-'+cid).value})});
+  const d = await r.json();
+  if(d.ok){ titleEl.value=''; document.getElementById('lessonDesc-'+cid).value=''; loadLessonsList(cid); }
+  else alert(d.msg);
+}
+async function delLesson(lid, title, cid){
+  if(!confirm(`⚠️ حذف درس "${title}"؟\n\nهيتمسح: كل فيديوهاته + سجل مشاهداته!\n\nالعملية مش بترجع!`)) return;
+  const r = await fetch('/api/admin/lessons/delete',{method:'POST',headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({lesson_id:lid})});
+  const d = await r.json();
+  if(d.ok) loadLessonsList(cid); else alert(d.msg||'حصل خطأ');
+}
+async function addVideo(lid, cid){
+  const urlEl = document.getElementById('vidUrl-'+lid);
+  if(!urlEl.value.trim()){ alert('اكتب رابط الفيديو'); return; }
+  const r = await fetch('/api/admin/lesson-videos',{method:'POST',headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({lesson_id:lid, title:document.getElementById('vidTitle-'+lid).value,
+      video_url:urlEl.value, description:document.getElementById('vidDesc-'+lid).value})});
+  const d = await r.json();
+  if(d.ok) loadLessonsList(cid); else alert(d.msg||'حصل خطأ');
+}
+async function delVideo(vid, cid){
+  if(!confirm('حذف الفيديو ده؟')) return;
+  const r = await fetch('/api/admin/lesson-videos/delete',{method:'POST',headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({id:vid})});
+  const d = await r.json();
+  if(d.ok) loadLessonsList(cid);
+}
+
+/* ═══ الكتب ═══ */
+async function loadBooksTab(){
+  BOOKS = await fetch('/api/admin/books').then(r=>r.json());
+  document.getElementById('booksList').innerHTML = BOOKS.length ? `<table>
+    <tr><th>الكتاب</th><th>السعر</th><th>PDF</th><th></th></tr>
+    ${BOOKS.map(b=>`<tr><td>${b.emoji} ${esc(b.title)}</td><td>${b.price} ج</td>
+      <td style="font-size:11px;">${b.pdf_url?'✅ موجود':'❌'}</td>
+      <td><button class="btnRed btnSm" onclick="delBook(${b.id})">🗑️ حذف</button></td></tr>`).join('')}</table>`
+    : '<div class="card">مفيش كتب — ضيف أول كتاب من فوق</div>';
+}
+async function addBook(){
+  const r = await fetch('/api/admin/books',{method:'POST',headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({title:nbTitle.value,description:nbDesc.value,price:nbPrice.value,emoji:nbEmoji.value,pdf_url:nbPdf.value})});
+  const d = await r.json();
+  if(d.ok){ alert('✅ الكتاب اتضاف'); nbTitle.value=nbDesc.value=nbPrice.value=nbEmoji.value=nbPdf.value=''; loadBooksTab(); }
+  else alert(d.msg);
+}
+async function delBook(id){
+  if(!confirm('متأكد من حذف الكتاب؟')) return;
+  await fetch('/api/admin/books/delete',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({id})});
+  loadBooksTab();
+}
+
+/* ═══ الامتحانات ═══ */
+async function loadExamsTab(){
+  COURSES = await fetch('/api/admin/courses').then(r=>r.json());
+  document.getElementById('examCourseSel').innerHTML = COURSES.map(c=>`<option value="${c.id}">${esc(c.name)}</option>`).join('');
+  document.getElementById('examCourseSel').onchange = renderExamPanel;
+  renderExamPanel();
+}
+async function renderExamPanel(){
+  const cid = document.getElementById('examCourseSel').value;
+  if(!cid) return;
+  const d = await fetch('/api/admin/exam?course_id='+cid).then(r=>r.json());
+  currentExam = d.exam;
+  const stBox = document.getElementById('examStatusBox');
+  const manage = document.getElementById('examManage');
+  const qArea = document.getElementById('examQuestionsArea');
+
+  if(!d.exam){
+    stBox.innerHTML = '<div class="statusBox stClosed">مفيش امتحان للكورس ده</div>';
+    manage.innerHTML = `
+      <input id="exTitle" placeholder="عنوان الامتحان">
+      <input id="exDur" type="number" placeholder="المدة بالدقائق (مثال: 30)" value="30">
+      <button class="btnGreen" onclick="createExam(${cid})">➕ إنشاء الامتحان</button>`;
+    qArea.innerHTML = '';
+    return;
+  }
+  const st = d.exam.status;
+  const stName = {open:'🟢 مفتوح — الطلاب بيدخلوا الآن', closed:'🔒 مقفول — مفيش حد يدخل', results:'🏆 النتائج معلنة — لوحة الشرف ظاهرة'};
+  stBox.innerHTML = `<div class="statusBox ${st==='open'?'stOpen':st==='results'?'stResults':'stClosed'}">
+    ${stName[st]||st}</div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;">
+      ${st!=='open'?`<button class="btnGreen" onclick="setExamStatus('open')">▶️ افتح الامتحان للطلاب</button>`:''}
+      ${st!=='closed'?`<button class="btnGray" onclick="setExamStatus('closed')">⏸️ اقفل الامتحان</button>`:''}
+      ${st!=='results'?`<button class="btnOrange" onclick="setExamStatus('results')">🏆 أعلن النتائج (لوحة الشرف)</button>`:''}
+      <button class="btnRed" onclick="deleteExam()">🗑️ امسح الامتحان بالكامل (لدورة جديدة)</button>
+    </div>`;
+
+  manage.innerHTML = `
+    <h3>➕ إضافة سؤال (${d.exam.title})</h3>
+    <select id="qType" onchange="renderQForm()">
+      <option value="mcq">اختيار من متعدد</option>
+      <option value="truefalse">صح وغلط</option>
+      <option value="order">رتب حسب</option>
+      <option value="essay">مقالي</option>
+    </select>
+    <div id="qForm"></div>`;
+  renderQForm();
+
+  let qHtml = `<h3>📋 أسئلة الامتحان (${d.questions.length})</h3>`;
+  qHtml += d.questions.length ? d.questions.map((q,i)=>{
+    let det = '';
+    if(q.type==='mcq') det = 'الاختيارات: '+ (q.options||[]).join(' | ') + ' — <b>الصح: '+esc(q.correct)+'</b>';
+    if(q.type==='truefalse') det = 'الصح: <b>'+esc(q.correct)+'</b>';
+    if(q.type==='order') det = 'الترتيب الصح: '+(q.order_items||[]).join(' ← ');
+    if(q.type==='essay') det = 'يتصحح يدويًا بعد التسليم';
+    return `<div class="card" style="padding:14px;">
+      <b>${i+1}.</b> ${esc(q.text)} <small style="color:var(--text-mute);">(${q.points} درجة — ${q.type})</small>
+      <div style="font-size:12px;color:var(--text-dim);margin-top:4px;">${det}</div>
+      <button class="btnRed btnSm" style="margin-top:6px;" onclick="delQuestion(${q.id})">🗑️ حذف السؤال</button>
+    </div>`;
+  }).join('') : '<div class="card">لسه مفيش أسئلة — ضيف من فوق</div>';
+
+  qHtml += `<h3>📊 التسليمات (${d.submissions.length})</h3>`;
+  qHtml += d.submissions.length ? d.submissions.map((s,i)=>{
+    let essays = '';
+    try {
+      const ans = JSON.parse(s.answers||'[]');
+      const qMap = {}; d.questions.forEach(q=>qMap[q.id]=q);
+      for(const a of ans){
+        const q = qMap[a.qid];
+        if(q && q.type==='essay'){
+          const graded = (s.essay_grades && s.essay_grades[a.qid] !== undefined) ? s.essay_grades[a.qid] : null;
+          essays += `<div class="essayBox">
+            <b>📝 سؤال مقالي:</b> ${esc(q.text)}
+            <div class="ans">إجابة الطالب: ${esc(a.value||'(فاضي)')}</div>
+            <input id="eg-${s.id}-${a.qid}" type="number" placeholder="درجة السؤال (من ${q.points})" value="${graded!==null?graded:''}" style="width:220px;margin-bottom:6px;">
+          </div>`;
+        }
+      }
+    } catch(e){}
+    return `<div class="card">
+      <div class="info">👤 ${esc(s.first_name+' '+s.last_name)} | ⏱ ${Math.floor(s.time_taken/60)} دقيقة ${s.time_taken%60} ثانية</div>
+      <div>الدرجة الحالية: <b>${(s.score+s.essay_score).toFixed(1)}</b> ${s.essay_pending?'<span class="badgeUsed">⏳ فيه مقالي يستنى تصحيح</span>':''}</div>
+      ${essays}
+      ${essays?`<button class="btnGreen btnSm" onclick="gradeEssay(${s.id})">✅ احفظ درجات المقالي</button>`:''}
+    </div>`;
+  }).join('') : '<div class="card">لسه محدش سلم</div>';
+
+  qArea.innerHTML = qHtml;
+}
+
+function renderQForm(){
+  const t = document.getElementById('qType').value;
+  const f = document.getElementById('qForm');
+  if(t==='mcq'){
+    f.innerHTML = `
+      <textarea id="qText" placeholder="نص السؤال"></textarea>
+      <input id="qOpt0" placeholder="الاختيار A">
+      <input id="qOpt1" placeholder="الاختيار B">
+      <input id="qOpt2" placeholder="الاختيار C">
+      <input id="qOpt3" placeholder="الاختيار D">
+      <select id="qCorrect"><option value="A">الصح: A</option><option value="B">الصح: B</option><option value="C">الصح: C</option><option value="D">الصح: D</option></select>
+      <input id="qPts" type="number" value="1" placeholder="الدرجة">
+      <button class="btnGreen" onclick="addQuestion()">➕ أضف السؤال</button>`;
+  } else if(t==='truefalse'){
+    f.innerHTML = `
+      <textarea id="qText" placeholder="نص السؤال"></textarea>
+      <select id="qCorrect"><option value="صح">الصح: صح</option><option value="غلط">الصح: غلط</option></select>
+      <input id="qPts" type="number" value="1" placeholder="الدرجة">
+      <button class="btnGreen" onclick="addQuestion()">➕ أضف السؤال</button>`;
+  } else if(t==='order'){
+    f.innerHTML = `
+      <textarea id="qText" placeholder="نص السؤال (مثال: رتب الخطوات من الأولى للأخيرة)"></textarea>
+      <input id="qOrd0" placeholder="الترتيب 1 (الصح أولاً)">
+      <input id="qOrd1" placeholder="الترتيب 2">
+      <input id="qOrd2" placeholder="الترتيب 3">
+      <input id="qOrd3" placeholder="الترتيب 4 (اختياري)">
+      <input id="qPts" type="number" value="1" placeholder="الدرجة">
+      <button class="btnGreen" onclick="addQuestion()">➕ أضف السؤال</button>`;
+  } else {
+    f.innerHTML = `
+      <textarea id="qText" placeholder="نص السؤال المقالي"></textarea>
+      <input id="qPts" type="number" value="1" placeholder="الدرجة القصوى">
+      <button class="btnGreen" onclick="addQuestion()">➕ أضف السؤال</button>`;
+  }
+}
+async function addQuestion(){
+  const t = document.getElementById('qType').value;
+  const body = {exam_id: currentExam.id, type:t, text:document.getElementById('qText').value,
+    points:document.getElementById('qPts').value};
+  if(!body.text) return alert('اكتب نص السؤال');
+  if(t==='mcq'){
+    body.options = [qOpt0.value,qOpt1.value,qOpt2.value,qOpt3.value].filter(x=>x!=='');
+    body.correct = document.getElementById('qCorrect').value;
+  } else if(t==='truefalse'){
+    body.correct = document.getElementById('qCorrect').value;
+  } else if(t==='order'){
+    body.order_items = [qOrd0.value,qOrd1.value,qOrd2.value,qOrd3.value].filter(x=>x!=='');
+  }
+  const r = await fetch('/api/admin/exam/question',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
+  const d = await r.json();
+  if(d.ok) renderExamPanel(); else alert(d.msg);
+}
+async function delQuestion(id){
+  await fetch('/api/admin/exam/question/delete',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({id})});
+  renderExamPanel();
+}
+async function createExam(cid){
+  const r = await fetch('/api/admin/exam',{method:'POST',headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({course_id:cid, title:document.getElementById('exTitle').value,
+      duration_minutes:document.getElementById('exDur').value})});
+  const d = await r.json();
+  if(d.ok) renderExamPanel(); else alert(d.msg);
+}
+async function setExamStatus(st){
+  await fetch('/api/admin/exam/status',{method:'POST',headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({exam_id:currentExam.id, status:st})});
+  renderExamPanel();
+}
+async function deleteExam(){
+  if(!confirm('هتمسح الامتحان وكل الأسئلة والنتائج — متأكد؟')) return;
+  await fetch('/api/admin/exam/delete',{method:'POST',headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({exam_id:currentExam.id})});
+  renderExamPanel();
+}
+async function gradeEssay(sid){
+  const grades = {};
+  document.querySelectorAll('[id^="eg-'+sid+'-"]').forEach(inp=>{
+    const qid = inp.id.split('-')[2];
+    if(inp.value!=='') grades[qid] = inp.value;
+  });
+  await fetch('/api/admin/exam/grade',{method:'POST',headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({submission_id:sid, grades})});
+  renderExamPanel();
+}
+
+/* ═══ الرموز ═══ */
+function fillCodeItems(){
+  const t = document.getElementById('codeType').value;
+  const items = t==='course' ? COURSES : BOOKS;
+  document.getElementById('codeItem').innerHTML = items.map(x=>`<option value="${x.id}">${esc(x.name||x.title)}</option>`).join('');
+}
+async function loadCodesTab(){
+  if(!COURSES.length) COURSES = await fetch('/api/admin/courses').then(r=>r.json());
+  if(!BOOKS.length) BOOKS = await fetch('/api/admin/books').then(r=>r.json());
+  fillCodeItems();
+  loadCodes();
+}
+async function loadCodes(){
+  const t = document.getElementById('codeType').value;
+  const item = document.getElementById('codeItem').value;
+  const codes = await fetch(`/api/admin/codes?item_type=${t}&item_id=${item}`).then(r=>r.json());
+  document.getElementById('codesList').innerHTML = `<table>
+    <tr><th>الرمز</th><th>الحالة</th><th>استخدمه</th></tr>
+    ${codes.map(c=>`<tr><td style="font-weight:900;letter-spacing:1px;color:var(--gold);">${esc(c.code)}</td>
+      <td>${c.used?'<span class="badgeUsed">مستخدم</span>':'<span class="badgeFree">متاح</span>'}</td>
+      <td>${c.used_by_name?esc(c.used_by_name):'—'}</td></tr>`).join('')}</table>` || '<div class="card">مفيش رموز</div>';
+}
+function genCode(){ newCode.value = 'KG' + Math.random().toString(36).slice(2,8).toUpperCase(); }
+async function addCode(){
+  const t = document.getElementById('codeType').value;
+  const item = document.getElementById('codeItem').value;
+  const r = await fetch('/api/admin/codes',{method:'POST',headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({code:newCode.value, item_type:t, item_id:item})});
+  const d = await r.json();
+  alert(d.ok?'✅ اتضاف':'❌ '+(d.msg||''));
+  newCode.value=''; loadCodes();
+}
+
+/* ═══ الطلاب ═══ */
+function levelText(avg){
+  avg = avg || 0;
+  if(avg >= 90) return {name:'ممتاز', color:'#22c55e'};
+  if(avg >= 75) return {name:'جيد جداً', color:'#84cc16'};
+  if(avg >= 60) return {name:'جيد', color:'#eab308'};
+  if(avg >= 50) return {name:'مقبول', color:'#f97316'};
+  return {name:'ضعيف', color:'#ef4444'};
+}
+
+let currentStudent = null;
+
+async function loadUsers(){
+  const us = await fetch('/api/admin/users').then(r=>r.json());
+  document.getElementById('usersList').innerHTML = `<table>
+    <tr><th>الاسم</th><th>ولي الأمر</th><th>السنة</th><th>فيديوهات</th><th>التقدير</th><th>الحالة</th><th>إجراءات</th></tr>
+    ${us.map(u=>{
+      const lv = levelText(u.grade_avg);
+      return `<tr>
+      <td>${esc(u.first_name+' '+u.last_name)}${u.parent_call?'<br><span class="badgeUsed">📞 مكالمة ولي أمر</span>':''}</td>
+      <td style="font-size:12px;">${esc(u.parent_phone)}</td>
+      <td>${esc(u.grade)}</td>
+      <td><b style="color:#c4b5fd;">${u.watched_videos||0}</b></td>
+      <td>${u.grade_avg>0?`<span class="levelBadge" style="background:${lv.color}22;color:${lv.color};border:1px solid ${lv.color}55;">${lv.name}</span>`:'<small style="color:var(--text-mute);">—</small>'}</td>
+      <td>${u.disabled?'<span class="badgeOff">🚫 معطل</span>':'<span class="badgeOn">✅ شغال</span>'}</td>
+      <td style="white-space:nowrap;">
+        <button class="btnGreen btnSm" onclick="openStudent(${u.id})">📊 تفاصيل</button>
+        ${u.disabled
+          ? `<button class="btnGreen btnSm" onclick="toggleUser(${u.id})">✅</button>`
+          : `<button class="btnRed btnSm" onclick="toggleUser(${u.id})">🚫</button>`}
+        <button class="btnRed btnSm" onclick="deleteUser(${u.id}, '${esc(u.first_name)} ${esc(u.last_name)}')">🗑️</button>
+      </td>
+    </tr>`;}).join('')}</table>`;
+}
+
+async function openStudent(id){
+  const modal = document.getElementById('studentModal');
+  modal.classList.remove('hidden');
+  modal.innerHTML = `<div class="modalBox"><div style="text-align:center;padding:40px;color:var(--text-mute);">⏳ بيجيب بيانات الطالب...</div></div>`;
+  window.scrollTo(0,0);
+  const r = await fetch('/api/admin/student/'+id);
+  const d = await r.json();
+  if(d.error){ modal.innerHTML = `<div class="modalBox"><button class="modalClose" onclick="closeStudentModal()">✕</button><div class="card">${esc(d.error)}</div></div>`; return; }
+  currentStudent = d;
+  renderStudentModal(d);
+}
+
+function closeStudentModal(){
+  document.getElementById('studentModal').classList.add('hidden');
+  currentStudent = null;
+}
+
+function renderStudentModal(d){
+  const u = d.user, lv = d.level;
+  const totalWatched = d.courses.reduce((a,c)=>a+c.watchedVideos,0);
+  const totalVideos = d.courses.reduce((a,c)=>a+c.totalVideos,0);
+  const courseOpts = '<option value="">عام (مش لكورس)</option>' + COURSES.map(c=>`<option value="${c.id}">${esc(c.emoji||'')} ${esc(c.name)}</option>`).join('');
+  const fmt = n => (typeof n==='number' && !Number.isInteger(n)) ? n.toFixed(1) : n;
+  document.getElementById('studentModal').innerHTML = `<div class="modalBox">
+    <button class="modalClose" onclick="closeStudentModal()">✕</button>
+    <div class="stuHead">
+      ${u.profile_pic?`<img src="${u.profile_pic}">`:`<div style="width:64px;height:64px;border-radius:50%;background:var(--grad-aurora);display:flex;align-items:center;justify-content:center;font-size:28px;color:#fff;">${esc((u.first_name||'?')[0])}</div>`}
+      <div>
+        <h2 style="color:#fff;margin-bottom:4px;">${esc(u.first_name+' '+u.last_name)}</h2>
+        <div style="font-size:13px;color:var(--text-mute);">📞 ${esc(u.phone)} | 👨‍👩‍👧 ولي الأمر: ${esc(u.parent_phone)} | 🎓 ${esc(u.grade)}</div>
+      </div>
+      <div style="margin-right:auto;display:flex;gap:8px;flex-wrap:wrap;align-items:center;">
+        <span class="levelBadge" style="background:${lv.color}22;color:${lv.color};border:1px solid ${lv.color}55;">${lv.emoji} ${lv.name}</span>
+        <button class="btnOrange btnSm" onclick="genTempPass(${u.id}, '${esc(u.first_name)}')">🔑 كلمة مؤقتة</button>
+        <button class="btnGreen btnSm" onclick="sendToParent(${u.id})">📤 إرسال لولي الأمر</button>
+      </div>
+    </div>
+
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;margin-bottom:16px;">
+      <div class="miniCard" style="text-align:center;"><div style="font-size:22px;font-weight:900;color:#c4b5fd;">${totalWatched}<small style="font-size:12px;color:var(--text-mute);">/${totalVideos}</small></div><small>فيديوهات تمت مشاهدتها</small></div>
+      <div class="miniCard" style="text-align:center;"><div style="font-size:22px;font-weight:900;color:var(--gold);">${d.grade_avg>0?Math.round(d.grade_avg)+'%':'—'}</div><small>متوسط الدرجات</small></div>
+      <div class="miniCard" style="text-align:center;"><div style="font-size:22px;font-weight:900;color:#06b6d4;">${d.courses.length}</div><small>كورسات مشترك</small></div>
+      <div class="miniCard" style="text-align:center;"><div style="font-size:22px;font-weight:900;color:${d.disabled?'#f43f5e':'#22c55e'};">${d.disabled?'معطل':'نشط'}</div><small>${u.attempts_left??3} محاولات متبقية</small></div>
+    </div>
+
+    ${d.courses.length ? d.courses.map(c=>{
+      const lPct = c.totalLessons ? Math.round(c.viewedLessons/c.totalLessons*100) : 0;
+      const vPct = c.totalVideos ? Math.round(c.watchedVideos/c.totalVideos*100) : 0;
+      return `<div class="miniCard">
+        <h4>${esc(c.emoji||'📚')} ${esc(c.course_name)}</h4>
+        <small>الدروس المكتملة: ${c.viewedLessons}/${c.totalLessons} — الفيديوهات: ${c.watchedVideos}/${c.totalVideos}</small>
+        <div style="font-size:11px;color:var(--text-mute);margin-top:6px;">تقدّم الدروس ${lPct}%</div>
+        <div class="pbar"><div style="width:${lPct}%"></div></div>
+        <div style="font-size:11px;color:var(--text-mute);margin-top:4px;">تقدّم الفيديوهات ${vPct}%</div>
+        <div class="pbar"><div style="width:${vPct}%"></div></div>
+        ${c.lessonProgress.length?`<details style="margin-top:8px;"><summary style="font-size:12px;color:var(--text-dim);cursor:pointer;">تفاصيل الدروس</summary><div style="font-size:12px;margin-top:6px;">${c.lessonProgress.map(lp=>`${lp.viewed?'✅':'⬜'} ${esc(lp.title)} (${lp.videos_watched}/${lp.videos_total})`).join('<br>')}</div></details>`:''}
+        ${c.examGrades.length?`<div style="margin-top:10px;font-size:12px;color:var(--text-dim);">📝 الامتحانات: ${c.examGrades.map(g=>{
+          const tot=fmt((g.score||0)+(g.essay_score||0)); const mx=g.max_points||0;
+          return `${esc(g.exam_title)}: <b>${tot}/${mx}</b>${g.essay_pending?' ⏳':''}`;
+        }).join(' | ')}</div>`:'<div style="margin-top:8px;font-size:12px;color:var(--text-mute);">مفيش امتحانات اتعملت</div>'}
+        ${c.manualGrades.length?`<div style="margin-top:8px;font-size:13px;">📊 درجات مسجّلة: ${c.manualGrades.map(g=>`${esc(g.title)} <b>${fmt(g.score)}/${fmt(g.max_score)}</b> <button class="btnRed btnSm" style="padding:1px 5px;font-size:10px;" onclick="delGrade(${g.id})">✕</button>`).join(' | ')}</div>`:''}
+      </div>`;
+    }).join('') : '<div class="miniCard" style="text-align:center;color:var(--text-mute);">مش مشترك في أي كورس لسه</div>'}
+
+    <div class="miniCard">
+      <h4>➕ تسجيل درجة جديدة</h4>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px;">
+        <input id="gTitle" placeholder="عنوان الدرجة (مذاكرة / اختبار...)">
+        <select id="gCourse">${courseOpts}</select>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr auto;gap:8px;">
+        <input id="gScore" type="number" placeholder="الدرجة المحصّل عليها">
+        <input id="gMax" type="number" placeholder="من" value="100">
+        <button class="btnGreen btnSm" onclick="addGrade(${u.id})">➕ حفظ</button>
+      </div>
+    </div>
+
+    <div class="miniCard">
+      <h4>📋 سجل السلوك</h4>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px;">
+        <select id="bKind"><option value="good">🌟 سلوك إيجابي</option><option value="warn">📝 تنبيه</option><option value="bad">⚠️ سلوك سلبي</option></select>
+        <select id="bCourse">${courseOpts}</select>
+      </div>
+      <div style="display:flex;gap:8px;margin-bottom:10px;">
+        <input id="bNote" placeholder="اكتب ملاحظة السلوك بالتفصيل..." style="flex:1;">
+        <button class="btnOrange btnSm" onclick="addBehavior(${u.id})">➕ إضافة</button>
+      </div>
+      ${d.behavior.length ? d.behavior.map(b=>{
+        const cls = b.kind==='good'?'bhGood':b.kind==='bad'?'bhBad':'bhWarn';
+        const icon = b.kind==='good'?'🌟':b.kind==='bad'?'⚠️':'📝';
+        return `<div class="miniCard ${cls}" style="margin-bottom:8px;padding:10px 12px;">
+          <div style="display:flex;justify-content:space-between;gap:8px;align-items:flex-start;">
+            <span style="font-size:13px;">${icon} ${esc(b.note)} ${b.course_name?'<small style="color:var(--text-mute);">('+esc(b.course_name)+')</small>':''}</span>
+            <button class="btnRed btnSm" style="padding:1px 6px;font-size:10px;flex-shrink:0;" onclick="delBehavior(${b.id})">✕</button>
+          </div>
+          <small style="display:block;margin-top:4px;color:var(--text-mute);">${new Date(b.created_at).toLocaleString('ar-EG')}</small>
+        </div>`;
+      }).join('') : '<small style="color:var(--text-mute);">مفيش سجلات سلوك مسجّلة</small>'}
+    </div>
+  </div>`;
+}
+
+async function addBehavior(uid){
+  const note = document.getElementById('bNote').value.trim();
+  if(!note){ alert('اكتب ملاحظة السلوك'); return; }
+  const r = await fetch('/api/admin/behavior',{method:'POST',headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({user_id:uid, course_id:document.getElementById('bCourse').value, kind:document.getElementById('bKind').value, note})});
+  const d = await r.json();
+  if(d.ok) openStudent(uid); else alert(d.msg||'حصل خطأ');
+}
+async function delBehavior(id){
+  if(!confirm('حذف سجل السلوك ده؟')) return;
+  await fetch('/api/admin/behavior/delete',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({id})});
+  if(currentStudent) openStudent(currentStudent.user.id);
+}
+async function addGrade(uid){
+  const title = document.getElementById('gTitle').value.trim();
+  if(!title){ alert('اكتب عنوان الدرجة'); return; }
+  const r = await fetch('/api/admin/grade',{method:'POST',headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({user_id:uid, course_id:document.getElementById('gCourse').value, title, score:document.getElementById('gScore').value, max_score:document.getElementById('gMax').value})});
+  const d = await r.json();
+  if(d.ok) openStudent(uid); else alert(d.msg||'حصل خطأ');
+}
+async function delGrade(id){
+  if(!confirm('حذف الدرجة دي؟')) return;
+  await fetch('/api/admin/grade/delete',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({id})});
+  if(currentStudent) openStudent(currentStudent.user.id);
+}
+async function sendToParent(uid){
+  const r = await fetch('/api/admin/parent-token',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({user_id:uid})});
+  const d = await r.json();
+  if(!d.ok){ alert(d.msg||'حصل خطأ'); return; }
+  const link = location.origin + '/parent.html?t=' + d.token;
+  let phone = String(d.parent_phone||'').replace(/\D/g,'');
+  if(phone && !phone.startsWith('20')) phone = phone.startsWith('0') ? '20'+phone.slice(1) : '20'+phone;
+  const msg = `أهلاً بك 🌟\nهذه بوابة متابعة ابنك/ابنتك «${d.name}».\nتابع المستوى الدراسي والدرجات وسجل السلوك وتقدّم الدروس والفيديوهات من هنا:\n${link}`;
+  const waLink = phone ? `https://wa.me/${phone}?text=${encodeURIComponent(msg)}` : `https://wa.me/?text=${encodeURIComponent(msg)}`;
+  window.open(waLink, '_blank');
+  alert('✅ اتفتح واتساب برسالة لولي الأمر.\nلو الرقم مظبوط ابعتها علطول، ولو لأ عدّل الرقم في واتساب.');
+}
+async function toggleUser(id){
+  const r = await fetch('/api/admin/toggle-user',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({user_id:id})});
+  const d = await r.json();
+  if(d.ok) loadUsers();
+}
+async function genTempPass(uid, name){
+  const r = await fetch('/api/admin/gen-temp-pass',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({user_id:uid})});
+  const d = await r.json();
+  if(d.ok){
+    const msg = 'أهلاً ' + name + '\nكلمة السر المؤقتة بتاعتك: ' + d.temp + '\nادخل المنصة بيها وغيّرها فورًا من الملف الشخصي';
+    window.open('https://wa.me/?text=' + encodeURIComponent(msg));
+    loadUsers();
+  }
+}
+async function loadResets(){
+  const r = await fetch('/api/admin/resets');
+  if(!r.ok){ document.getElementById('resetsList').innerHTML='<div class="card">خدمة الاستعادة مش مفعّلة في السيرفر</div>'; return; }
+  const d = await r.json();
+  document.getElementById('resetsList').innerHTML = d.rows.length ? d.rows.map(x=>`
+    <div class="card">
+      <b>${esc(x.email)}</b> — <span style="font-size:24px;font-weight:900;color:var(--gold);letter-spacing:4px;">${esc(x.code)}</span>
+      <div style="font-size:12px;color:var(--text-mute);margin-top:4px;">📱 ابعت الرمز للطالب واتساب | ينتهي بعد 15 دقيقة</div>
+    </div>`).join('') : '<div class="card">مفيش طلبات استعادة دلوقتي</div>';
+}
+async function loadSug(){
+  const r = await fetch('/api/admin/suggestions');
+  const rows = await r.json();
+  document.getElementById('sugList').innerHTML = rows.length ? rows.map(s=>`
+    <div class="card">
+      <div class="info">👤 ${esc(s.first_name+' '+s.last_name)} | 📞 ${esc(s.phone)} | 🕐 ${new Date(s.created_at).toLocaleString('ar-EG')}</div>
+      <div class="txt">${esc(s.text)}</div>
+      ${s.pic?`<img src="${s.pic}" style="max-width:250px;max-height:250px;border-radius:11px;margin-bottom:10px;display:block;border:1px solid var(--glass-3);">`:''}
+      <button class="btnRed btnSm" onclick="delSug(${s.id})">🗑️ تم — امسح الاقتراح</button>
+    </div>`).join('') : '<div class="card">مفيش اقتراحات دلوقتي</div>';
+}
+async function delSug(id){
+  if(!confirm('امسح الاقتراح ده؟')) return;
+  await fetch('/api/admin/suggestions/delete',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({id})});
+  loadSug();
+}
+async function deleteUser(uid, name){
+  if(!confirm(`⚠️ حذف حساب "${name}" نهائيًا؟\n\nهيتمسح: اشتراكاته + درجات امتحاناته + رسائله + كل بياناته!\n\nالعملية مش بترجع!`)) return;
+  if(!confirm('متأكد 100%؟ آخر تأكيد 😅')) return;
+  const r = await fetch('/api/admin/delete-user',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({user_id:uid})});
+  const d = await r.json();
+  if(d.ok){ alert('✅ الحساب اتمسح بكل بياناته'); loadUsers(); }
+}
+window.onload = async ()=>{
+  const r = await fetch('/api/admin/messages');
+  if(r.ok){ COURSES = await fetch('/api/admin/courses').then(r=>r.json()); BOOKS = await fetch('/api/admin/books').then(r=>r.json()); showAdmin(); }
+};
+</script>
+</body>
+</html>
